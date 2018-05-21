@@ -231,7 +231,7 @@
             </div>
             <div class="modal-body">
                 <div class="noExtension" id="noExtension">
-                    NOTE: Please install <a target="_blank" href="https://github.com/ChengOrangeJu/WebExtensionWallet">WebExtensionWallet</a>
+                    Please install <a target="_blank" href="https://github.com/ChengOrangeJu/WebExtensionWallet">WebExtensionWallet</a>
                     to use my notepad
                 </div>
             </div>
@@ -281,6 +281,21 @@
   var neb = new nebulas.Neb();
   neb.setRequest(new nebulas.HttpRequest(netWrokUrl));
 
+  function IsPC() {
+    var userAgentInfo = navigator.userAgent;
+    var Agents = ["Android", "iPhone",
+      "SymbianOS", "Windows Phone",
+      "iPad", "iPod"];
+    var flag = true;
+    for (var v = 0; v < Agents.length; v++) {
+      if (userAgentInfo.indexOf(Agents[v]) > 0) {
+        flag = false;
+        break;
+      }
+    }
+    return flag;
+  }
+
   $("#search").click(function () {
     var from = Account.NewAccount().getAddressString();
 
@@ -326,7 +341,7 @@
   })
 
   $('#write').click(function () {
-    if (typeof(webExtensionWallet) === "undefined") {
+    if (typeof(webExtensionWallet) === "undefined" && IsPC()) {
       $('#tipMessage').modal('show')
     } else {
       $('#saveNotepad').modal('show')
