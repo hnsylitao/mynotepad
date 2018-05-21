@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=0">
+    <meta name="x5-fullscreen" content="true">
+    <meta name="full-screen" content="yes">
+
+    <title>My NotePad(我的记事本)</title>
+    <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.min.css">
+    <style>
+        /*html {*/
+        /*background: url("img/bg.jpg");*/
+        /*background-size: cover;*/
+        /*}*/
+
+        .background {
+            z-index: -1;
+            position: fixed;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+        }
+
+        .background img {
+            object-fit: cover;
+        }
+
+        body {
+            background-color: inherit;
+        }
+
+        .logo {
+            width: 60%;
+            margin: 20px auto;
+        }
+
+        .name {
+            text-align: center;
+            font-size: 52px;
+            text-shadow: 2px 2px grey, 1px 1px #333;
+        }
+
+        .img {
+            width: 255px;
+            height: 200px;
+            margin: auto;
+            margin-top: 38px;
+            margin-bottom: 38px;
+        }
+
+        .img img {
+            width: 100%;
+            height: 100%;
+        }
+
+        .search {
+            width: 80%;
+            height: 60px;
+            margin: 0 auto 20px;
+        }
+
+        .noExtension {
+            margin: auto;
+            font-size: 14px;
+        }
+
+        #search_value {
+            width: 60%;
+            height: 50px;
+            font-size: 14px;
+            padding: 0 10px;
+            box-shadow: 3px 5px grey, 1px 1px #333;
+        }
+
+        .search button {
+            width: 19%;
+            height: 50px;
+            margin-left: 6px;
+            font-size: 14px;
+            box-shadow: 3px 5px grey, 1px 1px #333;
+        }
+
+        @media (max-width: 576px) {
+            .name {
+                font-size: 16px;
+            }
+
+            .img {
+                width: 61.25px;
+                height: 50px;
+                margin-top: 18px;
+                margin-bottom: 18px;
+            }
+
+            .search {
+                height: auto;
+            }
+
+            #search_value {
+                width: 100%;
+                height: 40px;
+                display: block;
+                border: 1px solid #fff1cd;
+                border-radius: 5px;
+                -webkit-appearance: none;
+            }
+
+            .search button {
+                background: #fff1cd;
+                height: 40px;
+                border-radius: 5px;
+                border: 1px solid #fff1cd;
+                width: 48%;
+                margin-top: 10px;
+                margin-left: 3px;
+            }
+        }
+
+        .result_success {
+            width: 70%;
+            margin: auto;
+            font-size: 22px
+        }
+
+        .notepad {
+            width: 100%;
+            margin-bottom: 20px;
+            padding: 0 20px 10px;
+            border: 2px solid #5a5a5a;
+            border-radius: 10px;
+        }
+
+        .notepad .title {
+            height: 50px;
+            line-height: 50px;
+            border-bottom: 2px solid #5a5a5a;
+            text-overflow: ellipsis;
+            overflow: hidden;
+        }
+
+        .notepad .title h3 {
+            font-size: 18px;
+            color: #333;
+            display: inline-block;
+        }
+
+        .notepad .title span {
+            font-size: 16px;
+            color: #999;
+            float: right;
+            display: inline-block;
+        }
+
+        .notepad .content {
+            margin-top: 10px;
+            font-size: 14px;
+            line-height: 20px;
+            letter-spacing: 1px;
+            color: #666;
+            white-space: pre-line;
+        }
+
+        .result_faile {
+            width: 70%;
+            margin: 0 auto 20px;
+            font-size: 18px;
+            color: #333;
+        }
+
+        p {
+            text-indent: 2em;
+            font-size: 30px;
+        }
+
+        .hide {
+            display: none;
+        }
+
+        #saveNotepad .modal-dialog {
+            max-width: 800px;
+        }
+
+        .contenner {
+
+        }
+    </style>
+</head>
+
+<body>
+<div class="contenner">
+    <div class="logo">
+        <div class="name">MY NOTEPAD(我的记事本)</div>
+        <div class="img logo_rotate">
+            <img src="img/logo.png" alt="">
+        </div>
+    </div>
+    <div class="search">
+        <input id="search_value" placeholder="plase input author" type="text">
+        <button id=search>search</button>
+        <button id=write>write</button>
+    </div>
+
+    <div class="result_success hide">
+        <div class="notepad">
+            <div class="title">
+                <h3>标题</h3>
+                <span>作者</span>
+            </div>
+            <div class="content">内容</div>
+        </div>
+    </div>
+
+    <div class="result_faile hide">
+        No related diary can be found
+    </div>
+
+    <div class="add_banner hide">
+        <input type="text" id="add_value" placeholder="input contents for your keyword">
+        <button id="push">submit</button>
+    </div>
+</div>
+
+<div class="background"><img src="img/bg.jpg"/></div>
+<div class="modal fade" id="tipMessage" tabindex="-1" role="dialog" aria-labelledby="tipMessageLabel"
+     aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="tipMessageLabel">tip message</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="noExtension" id="noExtension">
+                    NOTE: Please install <a target="_blank" href="https://github.com/ChengOrangeJu/WebExtensionWallet">WebExtensionWallet</a>
+                    to use SUPER DICTIONARY
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="saveNotepad" tabindex="-1" role="dialog" aria-labelledby="saveNotepadLabel"
+     aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="saveNotepadLabel">wirte notepad</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form role="form">
+                    <div class="form-group">
+                        <label for="title">名称</label>
+                        <input type="text" class="form-control" id="title" placeholder="plase input title">
+                    </div>
+                    <div class="form-group">
+                        <label for="value">名称</label>
+                        <textarea class="form-control" id="value" rows="5" placeholder="plase input content"></textarea>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" id="wirteData">wirte</button>
+            </div>
+        </div>
+    </div>
+</div>
+<script src=bower_components/jquery/dist/jquery.min.js></script>
+<script src=lib/nebPay.js></script>
+<script src=bower_components/bootstrap/dist/js/bootstrap.min.js></script>
+<script src=lib/nebulas.js></script>
+<script>
+  "use strict";
+  var netWrokUrl = "https://testnet.nebulas.io";
+  var dappAddress = "n1vmX79xn8Qi8PqLhuXuMGy3vpENG9rPpvz";
+  var NebPay = require("nebpay");
+  var nebulas = require("nebulas");
+
+  var nebPay = new NebPay();
+  var Account = nebulas.Account;
+  var neb = new nebulas.Neb();
+  neb.setRequest(new nebulas.HttpRequest(netWrokUrl));
+
+  $("#search").click(function () {
+    var from = Account.NewAccount().getAddressString();
+
+    var value = "0";
+    var nonce = "0"
+    var gas_price = "1000000"
+    var gas_limit = "2000000"
+    var callFunction = "getAuthorNotePads";
+    var callArgs = JSON.stringify([$("#search_value").val()]); //in the form of ["args"]
+    var contract = {
+      "function": callFunction,
+      "args": callArgs
+    }
+
+    neb.api.call(from, dappAddress, value, nonce, gas_price, gas_limit, contract).then(function (resp) {
+      try {
+        var result = JSON.parse(resp.result)    ////resp is an object, resp.result is a JSON string
+      } catch (err) {
+        throw new Error(resp.execute_err)
+      }
+      if (result.length > 0) {
+        var html = '';
+        $(result).each(function (index, item) {
+          html += '<div class="notepad">\n' +
+            '            <div class="title">\n' +
+            '                <h3 title="' + item.title + '">' + item.title + '</h3>\n' +
+            '            </div>\n' +
+            '            <div class="content">' + item.value + '</div>\n' +
+            '        </div>'
+        })
+        $('.result_success').removeClass('hide');
+        $('.result_faile').addClass('hide');
+        $('.result_success').html(html)
+      } else {
+        $('.result_faile').removeClass('hide');
+        $('.result_success').addClass('hide');
+      }
+    }).catch(function (err) {
+      console.log(err)
+      alert("error:" + err.message)
+    })
+
+  })
+
+  $('#write').click(function () {
+    if (typeof(webExtensionWallet) === "undefined") {
+      $('#tipMessage').modal('show')
+    } else {
+      $('#saveNotepad').modal('show')
+    }
+  })
+
+  $('#wirteData').click(function () {
+    var title = $('#title').val();
+    var content = $('#value').val();
+    if (title === '' || value === '') {
+      return alert('empty key / content')
+    }
+
+    var callFunction = "save"
+    var callArgs = JSON.stringify([title, content, 'text'])
+
+    var serialNumber = nebPay.call(dappAddress, "0", callFunction, callArgs, {
+      listener: function (resp) {
+        console.log(resp)
+      }
+    });
+
+    $('#saveNotepad').modal('hide')
+    $('#title').val('');
+    $('#value').val('');
+  })
+
+</script>
+</body>
+
+</html>
