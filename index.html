@@ -250,11 +250,11 @@
             <div class="modal-body">
                 <form role="form">
                     <div class="form-group">
-                        <label for="title">名称</label>
+                        <label for="title">title</label>
                         <input type="text" class="form-control" id="title" placeholder="plase input title">
                     </div>
                     <div class="form-group">
-                        <label for="value">名称</label>
+                        <label for="value">content</label>
                         <textarea class="form-control" id="value" rows="5" placeholder="plase input content"></textarea>
                     </div>
                 </form>
@@ -352,7 +352,7 @@
     var title = $('#title').val();
     var content = $('#value').val();
     if (title === '' || value === '') {
-      return alert('empty key / content')
+      return alert('empty title / content')
     }
 
     var callFunction = "save"
